@@ -1,6 +1,6 @@
 "use client";
 import * as Toast from "@radix-ui/react-toast";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import React from "react";
 
 import { XMarkIcon } from "@heroicons/react/20/solid";
@@ -25,26 +25,38 @@ export default function Page() {
       </button>
 
       <Toast.Provider>
-        {toasts.map((toast) => (
-          <Toast.Root
-            key={toast.id}
-            duration={1000000}
-            className="flex items-center justify-between rounded border-gray-700 bg-gray-800 px-6 py-4 text-sm font-medium"
-            asChild
-          >
-            <motion.li
-              initial={{ x: 300 }}
-              animate={{ x: 0 }}
-              transition={{ duration: 2 }}
-              layout
+        <AnimatePresence mode="popLayout">
+          {toasts.map((toast) => (
+            <Toast.Root
+              key={toast.id}
+              duration={1000}
+              className="flex items-center justify-between rounded border-gray-700 bg-gray-800 px-6 py-4 text-sm font-medium"
+              onOpenChange={() => {
+                setToasts(toasts.filter((t) => t.id !== toast.id));
+              }}
+              asChild
+              forceMount
             >
-              <Toast.Description>{toast.message}</Toast.Description>
-              <Toast.Close className="text-gray-600 hover:text-gray-200">
-                <XMarkIcon className="size-5" />
-              </Toast.Close>
-            </motion.li>
-          </Toast.Root>
-        ))}
+              <motion.li
+                initial={{ x: 300 }}
+                animate={{ x: 0 }}
+                exit={{
+                  opacity: 0,
+                  zIndex: -1,
+                  x: 300,
+                  transition: { duration: 0.5 },
+                }}
+                transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
+                layout
+              >
+                <Toast.Description>{toast.message}</Toast.Description>
+                <Toast.Close className="text-gray-600 hover:text-gray-200">
+                  <XMarkIcon className="size-5" />
+                </Toast.Close>
+              </motion.li>
+            </Toast.Root>
+          ))}
+        </AnimatePresence>
         <Toast.Viewport className="fixed right-4 top-4 flex w-80 flex-col-reverse gap-3" />
       </Toast.Provider>
     </div>
