@@ -30,7 +30,6 @@ export default function Page() {
             <Toast.Root
               key={toast.id}
               duration={1000}
-              className="flex items-center justify-between rounded border-gray-700 bg-gray-800 px-6 py-4 text-sm font-medium"
               onOpenChange={() => {
                 setToasts(toasts.filter((t) => t.id !== toast.id));
               }}
@@ -38,7 +37,7 @@ export default function Page() {
               forceMount
             >
               <motion.li
-                initial={{ x: 300 }}
+                initial={{ x: "calc(100% - 16px)" }}
                 animate={{ x: 0 }}
                 exit={{
                   opacity: 0,
@@ -48,16 +47,17 @@ export default function Page() {
                 }}
                 transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
                 layout
+                className="flex items-center justify-between rounded-lg border-gray-700 bg-gray-800 px-6 py-4 text-sm font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500"
               >
                 <Toast.Description>{toast.message}</Toast.Description>
-                <Toast.Close className="text-gray-600 hover:text-gray-200">
+                <Toast.Close className="rounded text-gray-600 hover:text-gray-200 focus-visible:text-gray-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-sky-500">
                   <XMarkIcon className="size-5" />
                 </Toast.Close>
               </motion.li>
             </Toast.Root>
           ))}
         </AnimatePresence>
-        <Toast.Viewport className="fixed right-4 top-4 flex w-80 flex-col-reverse gap-3" />
+        <Toast.Viewport className="fixed right-4 top-4 flex w-80 flex-col-reverse gap-3 rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500" />
       </Toast.Provider>
     </div>
   );
